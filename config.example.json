@@ -1,0 +1,7 @@
+{
+  "api_base_url": "http://localhost:8080",
+  "api_username": "your_username",
+  "api_password": "your_password",
+  "webex_access_token": "your_webex_token",
+  "webex_room_id": "your_webex_room_id"
+}
