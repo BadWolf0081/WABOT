@@ -11,7 +11,7 @@ def load_config(path="config.json"):
 
 def get_job_definitions(config):
     url = f"{config['api_base_url']}/twsd/api/v2/model/jobdefinition"
-    # Basic Auth example; adjust if using JWT or other
+    print(f"Querying job definitions from: {url}")
     auth = HTTPBasicAuth(config["api_username"], config["api_password"])
     headers = {
         "Accept": "application/json"
