@@ -1,6 +1,9 @@
 import requests
 import json
 from requests.auth import HTTPBasicAuth
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def load_config(path="config.json"):
     with open(path, "r") as f:
@@ -13,7 +16,7 @@ def get_job_definitions(config):
     headers = {
         "Accept": "application/json"
     }
-    response = requests.get(url, auth=auth, headers=headers)
+    response = requests.get(url, auth=auth, headers=headers, verify=False)
     if response.status_code == 200:
         return response.json()
     else:
