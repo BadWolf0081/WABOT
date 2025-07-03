@@ -2,8 +2,12 @@ import requests
 import json
 from requests.auth import HTTPBasicAuth
 import urllib3
+import logging
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Set up logging to file
+logging.basicConfig(filename="job_definitions.log", level=logging.INFO, format="%(asctime)s %(message)s")
 
 def load_config(path="config.json"):
     with open(path, "r") as f:
@@ -27,10 +31,8 @@ def print_job_definitions(data):
     print("Raw API response:")
     print(json.dumps(data, indent=2))  # Print the full response for debugging
 
-    # Try to handle different possible structures
     jobs = []
     if isinstance(data, dict):
-        # If the response is a dict with a list of job definitions
         if "data" in data and isinstance(data["data"], list):
             jobs = data["data"]
         elif "kind" in data and data["kind"] == "JobDefinition":
@@ -46,7 +48,11 @@ def print_job_definitions(data):
 
     print("Job Definitions:")
     for job in jobs:
-        print(f"- Name: {job.get('name')}, ID: {job.get('id')}")
+        # Defensive: ensure structure matches expected
+        defn = job.get("def", {})
+        workstation = defn.get("workstation", "UNKNOWN")
+        name = defn.get("name", "UNKNOWN")
+        logging.info(f"Found job definition - Workstation: {workstation}, Name: {name}")
 
 if __name__ == "__main__":
     config = load_config("config.json")
